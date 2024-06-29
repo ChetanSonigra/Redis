@@ -1,8 +1,10 @@
 import redis,string,random
+import dotenv,os
 
+dotenv.load_dotenv()
 
 def load_data_to_redis(data):
-    r = redis.StrictRedis("localhost",6379)
+    r = redis.StrictRedis(host=os.getenv('host'),port=os.getenv('redis_port'))
 
     for idx, course_data in enumerate(data):
         key = f"course:{idx+1}"
@@ -19,7 +21,7 @@ def generate_random_course():
     return course_name,instructor,students_enrolled,price,rating
 
 def load_courses_to_redis():
-    r = redis.StrictRedis('localhost',6379)
+    r = redis.StrictRedis(host=os.getenv('host'),port=os.getenv('redis_port'))
     
     for idx in range(1,1001):
         course_entry = generate_random_course()
@@ -31,6 +33,19 @@ def load_courses_to_redis():
 
     print("1000 courses loaded into redis.")
 
+def get_data():
+    r = redis.StrictRedis(host=os.getenv('host'),port=os.getenv('redis_port'))
+
+    courses_list = r.mget(['course:1','course:2','course:3'])
+    courses = []
+    for course in courses_list:
+        if course:
+            course = str(course)[2:-1]
+            course = course.split(',')
+            courses.append(course)   
+    if courses:
+        return courses
+
 if __name__=="__main__":
     sample_data = [
         ('Python','Chetan Sonigra',5000,24.99,4.7),
@@ -38,5 +53,5 @@ if __name__=="__main__":
         ('FASTAPI','Chetan Sonigra',4000,49.99, 4.4)
     ]
 
-    load_courses_to_redis()
+    # load_courses_to_redis()
     load_data_to_redis(sample_data)

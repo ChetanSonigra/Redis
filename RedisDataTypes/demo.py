@@ -1,6 +1,8 @@
 import redis
+import dotenv, os
 
-r = redis.StrictRedis(host="localhost",port=6379)
+dotenv.load_dotenv()
+r = redis.StrictRedis(host=os.getenv('host'),port=os.getenv('redis_port'))
 
 print(r)
 
