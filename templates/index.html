@@ -1,0 +1,40 @@
+All Courses:
+<div>Data Source: {{data_source}}</div>
+<div>Time Taken: {{duration}}</div>
+<hr>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Course
+            </th>
+            <th>
+                Instructor
+            </th>
+            <th>
+                Students Enrolled
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Rating
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+
+        <tr>
+            <td>{{course[0]}}</td>
+            <td>{{course[1]}}</td>
+            <td>{{course[2]}}</td>
+            <td>{{course[3]}}</td>
+            <td>{{course[4]}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
