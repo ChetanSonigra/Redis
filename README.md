@@ -35,18 +35,49 @@ Redis fundamentals and working with redis through python
 21. `lpop list_name [count]`: &emsp; pops "count" item from top of a list.
 22. `rpop list_name [count]`: &emsp; pops "count" item from bottm of a list.
 23. `ltrim list_name start stop`: &emsp; keeps only values form start to stop in a list
-24. `hset key field1 value1 [field2 value2 ...]`: creates key if not exist else adds in existing key pairs of key-value.
-25. `hget key field`: gives value of a field in a key/hash
-26. `hmget key field1 field2 ...`: gives values of fields in a key/hash
-27. `hmset key field1 value1 [field2 value2 ...]`: similar to hset, deprecated.
-28. `sadd users_ip ip1 ip2 ...`: adds values into set
-29. `smembers users_ip`: shows all members of set
-30. `scard users_ip`: length of a set
-31. `sismember users_ip ip1`: checks if member is in set
-31. `sdiff set1 set2`: members of set1-set2
-31. `spop setname [count]`: pops one or more random members from a set.
-32. `srem setname memeber`: removes a member from a set.
-33. `watch key`: watches a key during multi transaction
-34. `multi`: to start multiple transaction
-35. `exec`: to run all commands in a transaction
-36. `discard`: to discard a transaction 
+24. `hset key field1 value1 [field2 value2 ...]`: &emsp; creates key if not exist else adds in existing key pairs of key-value.
+25. `hget key field`: &emsp; gives value of a field in a key/hash
+26. `hmget key field1 field2 ...`:&emsp; gives values of fields in a key/hash
+27. `hmset key field1 value1 [field2 value2 ...]`:&emsp; similar to hset, deprecated.
+28. `sadd users_ip ip1 ip2 ...`:&emsp; adds values into set
+29. `smembers users_ip`:&emsp; shows all members of set
+30. `scard users_ip`: &emsp;length of a set
+31. `sismember users_ip ip1`: &emsp;checks if member is in set
+31. `sdiff set1 set2`:&emsp; members of set1-set2
+31. `spop setname [count]`:&emsp; pops one or more random members from a set.
+32. `srem setname memeber`:&emsp; removes a member from a set.
+33. `watch key`:&emsp; watches a key during multi transaction
+34. `multi`:&emsp; to start multiple transaction
+35. `exec`:&emsp; to run all commands in a transaction
+36. `discard`:&emsp; to discard a transaction 
+
+## Data Persistence:
+
+1. RDB:&emsp; Performs point in time snapshot of data at specified interval of time. <br/>
+&emsp;&emsp; save 60 1000 30 500(if every 60 seconds 1000 keys, or 30 seconds 500 keys) <br/>
+&emsp;&emsp; dir path/to/dir/to_save/redis_dump.rdb <br/>
+&emsp;&emsp; add above 2 line in redis.conf <br/>
+&emsp;&emsp; Advantages: <br/>
+&emsp;&emsp; - Compact, single file of redis data<br/>
+&emsp;&emsp; - Perfect for backups<br/>
+&emsp;&emsp; - Performance is good<br/>
+&emsp;&emsp; - Allows faster restarts<br/>
+&emsp;&emsp; Disadvantages: <br/>
+&emsp;&emsp; - Chances of data loss <br/>
+&emsp;&emsp; - Fork process, may impact write operations for few milliseconds.<br/>
+
+2. AOF:&emsp; Append Only File - Keeps log of every write operations in redis. <br/>
+&emsp;&emsp; Define fsycn policies, always, everysec <br/>
+&emsp;&emsp; appendonly yes <br/>
+&emsp;&emsp; Add above line in redis.conf <br/>
+&emsp;&emsp; Advantages: <br/>
+&emsp;&emsp; - High Durability <br/>
+&emsp;&emsp; - Allows different fsync policies <br/>
+&emsp;&emsp; - Append only logs, no chances of corruption <br/>
+&emsp;&emsp; - Corrupted files can be fixed by redis-check-aof tool <br/>
+&emsp;&emsp; - AOF files can be parsed, lines can be removed. <br/>
+&emsp;&emsp; Disadvantages: <br/>
+&emsp;&emsp; - Size is bigger than RDB <br/>
+&emsp;&emsp; - Slower than RDB <br/>
+
+3. Hybrid:&emsp; (RDB+AOF) - Both can work together.:
