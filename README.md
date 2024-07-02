@@ -81,3 +81,9 @@ Redis fundamentals and working with redis through python
 &emsp;&emsp; - Slower than RDB <br/>
 
 3. Hybrid:&emsp; (RDB+AOF) - Both can work together.:
+
+## Replication:
+- Add `replicaof master_ip master_port` in slave's redis.conf file.
+- change port, logfilename, dump.rdb file name for slaves in redis.conf file.
+- Run redis server for master and slaves.
+- slaves can only be used to read data.
