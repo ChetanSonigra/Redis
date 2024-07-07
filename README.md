@@ -123,3 +123,39 @@ Redis fundamentals and working with redis through python
     - 4 sentinels (2 on application server, 2 on redis server), 1 master, 1 redis
     - Quorum = 3
     - Good approach if we have min 3 servers.
+
+## Redis Cluster:
+- minimum 3 masters and 3 slaves needed.
+- Multi master architecture
+- Data is partitioned into 16k buckets.
+- Each bucket are assigned a master.
+- Pros:
+- &emsp; Scalable
+- &emsp; Can scale upto 1000 nodes cluster
+- &emsp; Performance is good
+- &emsp; Allows multiple masters
+- Cons:
+- &emsp; Need atleast 6 servers to setup a cluster
+- &emsp; Upgrading or downgrading to other topology is difficult.
+
+### Steps: 
+1. create n1_redis.conf file with details as below in each node: <br>
+&emsp; port 7001/7002/7003/7004/7005/7006 <br>
+&emsp; cluster-enabled yes <br>
+&emsp; cluster-config-file nodes.conf <br>
+&emsp; cluster-node-timeout 5000 <br>
+&emsp; appendonly yes <br>
+
+2. Start redis-server on each node<br>
+&emsp; redis-server n1_redis.conf & <br>
+
+3. Create a cluster: <br>
+&emsp; redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 
+127.0.0.1:7004 127.0.0.1:7005 127.0.0.1:7006 --cluster-replicas 1 <br>
+
+4. Connect to server: <br>
+&emsp; redis-cli -c -p 7001
+
+5. Check cluster health: <br>
+&emsp; redis-cli --cluster check 127.0.0.1:7001 <br>
+&emsp; redis-cli -p 7001 cluster nodes
