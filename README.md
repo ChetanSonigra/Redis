@@ -50,6 +50,9 @@ Redis fundamentals and working with redis through python
 34. `multi`:&emsp; to start multiple transaction
 35. `exec`:&emsp; to run all commands in a transaction
 36. `discard`:&emsp; to discard a transaction 
+37. `sentinel master master_name`: &emsp; gives master node details.
+38. `slaveof ip_address port`: &emsp; makes a redis slave slave of node having given ip and port.
+39. `save`: &emsp; saves current data in dump.rdb in redis-server.
 
 ## Data Persistence:
 
@@ -87,3 +90,36 @@ Redis fundamentals and working with redis through python
 - change port, logfilename, dump.rdb file name for slaves in redis.conf file.
 - Run redis server for master and slaves.
 - slaves can only be used to read data.
+
+## High Availability:
+- Install sentinel on minimum 3 servers.
+- Quorum (No. of sentinel which needs agree on master down and elect a new master)
+- down-after milliseconds
+- Redis port = 6379, Sentinel port = 26379
+- redis.conf, sentinel.conf 
+1. Sentinel Deployment 01: <br>
+    - Never do this deployment
+    - 2 sentinels, 1 master 1 slave
+    - quorum =2 
+    - Only works if redis is down but sentinels are working on both servers.
+    - if complete box is down,redis will become unavailable.
+2. Sentinel Deployment 02: <br>
+    - 3 sentinels, 1 master, 2 slaves
+    - Quorum = 2
+    - Good approach if we have min 3 servers.
+    - issues:
+    - &emsp; 1. If nodes are seperated by network partition
+    - &emsp; Mitigation - min-replica-to-write 1 (stops writes if can't write to replica), min-replicas-max-lag 10
+    - &emsp; 2. If two replicas are down, master stops accepting writes.
+
+3. Sentinel Deployment 03: <br>
+    - 3 sentinels(on application server), 1 master 1 slave
+    - Quorum 2
+    - Good approach if we have only 2 redis servers.
+    - Issue: 
+    - &emsp; Network disconnect issue between redis server and application server.
+
+4. Sentinel Deployment 04: <br>
+    - 4 sentinels (2 on application server, 2 on redis server), 1 master, 1 redis
+    - Quorum = 3
+    - Good approach if we have min 3 servers.
